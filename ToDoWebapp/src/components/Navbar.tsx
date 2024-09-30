@@ -13,7 +13,7 @@ export const Navbar: React.FC = () =>{
                 </div>
                 <div className="col-span-6 sm:col-span-10 flex items-center min-h-[40px] shadow">
                    <button className="hidden text-white border min-w-[85px] min-h-[30px] sm:inline-flex items-center rounded-full">
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="flex justify-center size-7">
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" className="flex justify-center size-7">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
 
