@@ -1,8 +1,8 @@
 interface SidebarItemProps {
-  icon: React.ReactNode; // This can be any valid JSX element (like an icon component)
-  text: string; // Text for the sidebar item
-  active?: boolean; // Optional prop for active state
-  alert?: boolean; // Optional prop for alert state
+  icon: React.ReactNode;
+  text: string;
+  active?: boolean;
+  alert?: boolean;
 }
 interface SidebarProps {
   children: React.ReactNode;
@@ -46,12 +46,16 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
 }) => {
   return (
     <li
-      className={
-        "relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${active ?:}"
-      }
+      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer 
+        transition-colors transition-colors ${
+          active ? "bg-gray-500" : "hover:bg-gray-500"
+        }`}
     >
       {icon}
-      <span>{text}</span>
+      <span className="text-white w-52 ml-3">{text}</span>
+      {alert && (
+        <div className={`absolute right-2 w-2 h-2 rounded bg-amber-400`} />
+      )}
     </li>
   );
 };

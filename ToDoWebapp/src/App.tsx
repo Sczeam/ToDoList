@@ -13,7 +13,7 @@ function App() {
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="currentColor"
+              stroke="gray"
               className="size-6"
             >
               <path
@@ -24,7 +24,7 @@ function App() {
             </svg>
           }
           text="Home"
-          alert
+          active
         />
 
         <SidebarItem
@@ -34,7 +34,7 @@ function App() {
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="currentColor"
+              stroke="gray"
               className="size-6"
             >
               <path
@@ -45,7 +45,6 @@ function App() {
             </svg>
           }
           text="My Task"
-          alert
         />
 
         <SidebarItem
@@ -55,7 +54,7 @@ function App() {
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
-              stroke="currentColor"
+              stroke="gray"
               className="size-6"
             >
               <path
