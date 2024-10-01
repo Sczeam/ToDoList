@@ -16,9 +16,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside
       className={`h-screen sm:w-[250px] transition-all duration-300 ${
         isSidebarExpanded ? "left-0" : "-left-full"
-      } fixed`}
+      } relative`}
     >
-      <nav className="h-full flex flex-col bg-gray-700 border-r shadow-sm">
+      <nav className=" h-full flex flex-col bg-gray-700 border-r shadow-sm">
         <ul className="flex-1 px-3">{children}</ul>
         <div className="gap-1 border-t p-3 grid grid-cols-1 justify-items-center">
           <button className="inline-flex h-full border border-white rounded p-1 text-white">
