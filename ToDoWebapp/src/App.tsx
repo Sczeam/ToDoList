@@ -1,11 +1,18 @@
+import { useState } from "react";
 import { Navbar } from "./components/Navbar";
 import { Sidebar, SidebarItem } from "./components/Sidebar";
 
 function App() {
+  const [isSidebarExpanded, setSidebarExpanded] = useState<boolean>(false);
+
+  const toggleSidebar = () => {
+    setSidebarExpanded((prev) => !prev);
+  };
+
   return (
     <>
-      <Navbar />
-      <Sidebar>
+      <Navbar toggleSidebar={toggleSidebar} />
+      <Sidebar isSidebarExpanded={isSidebarExpanded}>
         <SidebarItem
           icon={
             <svg
