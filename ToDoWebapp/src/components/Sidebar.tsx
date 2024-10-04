@@ -16,7 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside
       className={`h-screen sm:w-[250px] transition-all duration-300 ${
         isSidebarExpanded ? "left-0" : "-left-full"
-      } relative`}
+      } absolute`}
     >
       <nav className=" h-full flex flex-col bg-gray-700 border-r shadow-sm">
         <ul className="flex-1 px-3">{children}</ul>
