@@ -31,7 +31,7 @@ function App() {
             </svg>
           }
           text="Home"
-          active
+          // active
         />
 
         <SidebarItem
