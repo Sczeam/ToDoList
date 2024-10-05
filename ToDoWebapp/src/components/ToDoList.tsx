@@ -29,7 +29,7 @@ export const ToDoList: React.FC = () => {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        class="size-6"
+        className="size-6"
       >
         <path
           fill-rule="evenodd"
@@ -97,7 +97,7 @@ export const ToDoList: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="size-6"
+          className="size-6"
         >
           <path
             fill-rule="evenodd"
@@ -110,7 +110,7 @@ export const ToDoList: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="size-6"
+          className="size-6"
         >
           <path
             fill-rule="evenodd"
@@ -120,22 +120,6 @@ export const ToDoList: React.FC = () => {
         </svg>
       ),
     }));
-    if (isTableExpand.isExpand) {
-      isTableExpand.icon(
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="size-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      );
-    }
   };
   return (
     <>
@@ -174,7 +158,6 @@ export const ToDoList: React.FC = () => {
           )}
         </div>
       </div>
-      {/*<div className="mt-1 h-[30px] w-full bg-pink-500"></div>*/}
       <div className="p-1 h-[30px] flex items-center w-full col-span-2">
         <button className="flex flex-inline justify-center items-center ml-1 rounded border shadow font-poppins p-1 text-[13px]">
           <svg
@@ -209,8 +192,8 @@ export const ToDoList: React.FC = () => {
             Status
           </div>
         </div>
-        <div className="Static col-span-12 min:h-[50px]">
-          <div className="flex flex-inline items-center">
+        <div className="Static col-span-12 min:h-[50px] divide-y ">
+          <div className="flex flex-inline items-center py-3">
             <span onClick={ExpandTable} className="cursor-pointer">
               {/* expand icon here */}
               {isTableExpand.icon}
@@ -221,14 +204,11 @@ export const ToDoList: React.FC = () => {
             </span>
           </div>
           {isTableExpand.isExpand && (
-            <div className="inline-block h-full w-full bg-yellow-500">
-              Table here
-            </div>
+            <div className="inline-block h-full w-full ">Table here</div>
           )}
         </div>
-        <div>3</div>
       </div>
-      <div className="h-[100px] w-full "></div>
+      <div className="h-[100px] w-full bg-red-500"></div>
     </>
   );
 };
