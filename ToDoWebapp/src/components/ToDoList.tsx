@@ -1,10 +1,22 @@
 import { useState } from "react";
 
 export const ToDoList: React.FC = () => {
-  const [isSetStatusClick, setStatusClick] = useState<boolean>(false);
+  const [isSetStatusClick, setStatusClick] = useState<boolean>(false); //useState for setStatus box
+  const [statusText, setStatusText] = useState<string>("Set Status");
+
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
     console.log("clicked");
+  };
+
+  const OnTrack = () => {
+    setStatusText("On Track");
+    setStatusClick(false);
+  };
+
+  const AtRisk = () => {
+    setStatusText("At Risk");
+    setStatusClick(false);
   };
   return (
     <>
@@ -18,9 +30,9 @@ export const ToDoList: React.FC = () => {
         <div className="relative flex flex-inline justify-center items-center h-[30px] col-span-4 sm:col-span-1 w-full">
           <span
             onClick={ToogleSetStatus}
-            className="flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
+            className="select-none flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
           >
-            set status
+            {statusText}
           </span>
           <svg
             onClick={ToogleSetStatus}
@@ -38,12 +50,25 @@ export const ToDoList: React.FC = () => {
             />
           </svg>
           {isSetStatusClick && (
-            <aside className="rounded-lg shadow absolute top-6 -right-5 w-[100px] h-[60px] bg-teal-500"></aside>
+            <aside className="flex justify-center items-center flex-col rounded-lg shadow-lg absolute top-7 right-0 w-[80px] h-[60px] border border-black">
+              <span
+                onClick={OnTrack}
+                className="select-none flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
+              >
+                on track
+              </span>
+              <span
+                onClick={AtRisk}
+                className="select-none flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
+              >
+                at risk
+              </span>
+            </aside>
           )}
         </div>
       </div>
       <div className="mt-1 h-[30px] w-full bg-pink-500"></div>
-      <div className="h-[100px] w-full bg-red-500"></div>
+      <div className="h-[100px] w-full "></div>
       <div className="h-[100px] w-full bg-teal-500"></div>
       <div className="h-[100px] w-full bg-orange-500"></div>
     </>
