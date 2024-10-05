@@ -63,14 +63,14 @@ export const ToDoList: React.FC = () => {
   };
   return (
     <>
-      <div className="mt-1 grid grid-cols-12">
-        <div className="p-1 h-[30px] col-span-8 sm:col-span-2 flex justify-center items-center">
+      <div className="mt-1 col-span-2 grid grid-cols-12">
+        <div className="p-1 h-[30px] col-span-4 sm:col-span-1 flex justify-center items-center">
           <input
             placeholder="Title"
             className="ml-1 text-center w-full h-full font-poppins font-extrabold"
           />
         </div>
-        <div className="relative flex flex-inline justify-center items-center h-[30px] col-span-4 sm:col-span-1 w-full">
+        <div className="relative flex flex-inline justify-center items-center h-[30px] col-span-2 sm:col-span-1 w-full">
           <span
             onClick={ToogleSetStatus}
             className="select-none flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
@@ -80,7 +80,7 @@ export const ToDoList: React.FC = () => {
           {/*display emoji dynamically here*/}
           {statusEmoji}
           {isSetStatusClick && (
-            <aside className="flex justify-center items-center flex-col rounded-lg shadow-lg absolute top-7 right-0 w-[80px] h-[60px] border border-black">
+            <aside className="flex justify-center items-center flex-col rounded-lg shadow-lg absolute top-7 w-[80px] h-[60px] border border-black">
               <span
                 onClick={OnTrack}
                 className="hover:bg-gray-500 rounded select-none flex justify-center items-center font-poppins h-full w-full font-base text-[8px] sm:text-[10px] font-extrabold cursor-pointer"
@@ -97,8 +97,8 @@ export const ToDoList: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="mt-1 h-[30px] w-full bg-pink-500"></div>
-      <div className="h-[100px] w-full "></div>
+      {/*<div className="mt-1 h-[30px] w-full bg-pink-500"></div>*/}
+      <div className="h-[100px] w-full bg-red-500"></div>
       <div className="h-[100px] w-full bg-teal-500"></div>
       <div className="h-[100px] w-full bg-orange-500"></div>
     </>
