@@ -10,7 +10,7 @@ export const ToDoList: React.FC = () => {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      class="size-6"
+      className="size-6"
     >
       <path
         stroke-linecap="round"
@@ -102,8 +102,43 @@ export const ToDoList: React.FC = () => {
         </div>
       </div>
       {/*<div className="mt-1 h-[30px] w-full bg-pink-500"></div>*/}
-      <div className="h-[100px] w-full"></div>
-      <div className="h-[100px] w-full "></div>
+      <div className="p-1 h-[30px] flex items-center w-full col-span-2">
+        <button className="flex flex-inline justify-center items-center ml-1 rounded border shadow font-poppins p-1 text-[13px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="size-4"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Add Task
+        </button>
+      </div>
+      <div className="ml-3 border-t-[1px] min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
+        <div className="h-[30px] w-full grid grid-cols-12 divide-x-2">
+          <div className="col-span-3 font-poppins flex items-center">
+            Task Name
+          </div>
+          <div className="hidden sm:flex col-span-3 font-poppins items-center pl-1">
+            Due Date
+          </div>
+          <div className="hidden sm:flex col-span-3 font-poppins  items-center pl-1">
+            Priority
+          </div>
+          <div className="hidden sm:flex col-span-3 font-poppins  items-center pl-1">
+            Status
+          </div>
+        </div>
+        <div className="bg-red-500 col-span-12 h-[50px]">2</div>
+        <div>3</div>
+      </div>
       <div className="h-[100px] w-full "></div>
     </>
   );
