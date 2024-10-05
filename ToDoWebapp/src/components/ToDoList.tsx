@@ -1,4 +1,8 @@
 import { useState } from "react";
+interface TableState {
+  icon: JSX.Element;
+  isExpand: boolean;
+}
 
 export const ToDoList: React.FC = () => {
   const [isSetStatusClick, setStatusClick] = useState<boolean>(false); //useState for setStatus box
@@ -19,6 +23,24 @@ export const ToDoList: React.FC = () => {
       />
     </svg>
   );
+  const [isTableExpand, setTableExpand] = useState<TableState>({
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="size-6"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    ),
+    isExpand: true,
+  });
+
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
     console.log("clicked");
@@ -65,6 +87,56 @@ export const ToDoList: React.FC = () => {
     );
     setStatusClick(false);
   };
+
+  const ExpandTable = () => {
+    setTableExpand((prev) => ({
+      ...prev,
+      isExpand: !prev.isExpand,
+      icon: prev.isExpand ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      ),
+    }));
+    if (isTableExpand.isExpand) {
+      isTableExpand.icon(
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      );
+    }
+  };
   return (
     <>
       <div className="mt-1 col-span-2 grid grid-cols-12">
@@ -83,6 +155,7 @@ export const ToDoList: React.FC = () => {
           </span>
           {/*display emoji dynamically here*/}
           {statusEmoji}
+
           {isSetStatusClick && (
             <aside className="flex justify-center items-center flex-col rounded-lg shadow-lg absolute top-7 w-[80px] h-[60px] border border-black">
               <span
@@ -121,7 +194,7 @@ export const ToDoList: React.FC = () => {
           Add Task
         </button>
       </div>
-      <div className="ml-3 border-t-[1px] min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
+      <div className="Relative ml-3 border-t-[1px] min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
         <div className="h-[30px] w-full grid grid-cols-12 divide-x-2">
           <div className="col-span-3 font-poppins flex items-center">
             Task Name
@@ -136,7 +209,23 @@ export const ToDoList: React.FC = () => {
             Status
           </div>
         </div>
-        <div className="bg-red-500 col-span-12 h-[50px]">2</div>
+        <div className="Static col-span-12 min:h-[50px]">
+          <div className="flex flex-inline items-center">
+            <span onClick={ExpandTable} className="cursor-pointer">
+              {/* expand icon here */}
+              {isTableExpand.icon}
+            </span>
+
+            <span className="font-extrabold font-poppins sm:text-[20px] select-none">
+              To Do
+            </span>
+          </div>
+          {isTableExpand.isExpand && (
+            <div className="inline-block h-full w-full bg-yellow-500">
+              Table here
+            </div>
+          )}
+        </div>
         <div>3</div>
       </div>
       <div className="h-[100px] w-full "></div>
