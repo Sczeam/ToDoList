@@ -229,6 +229,7 @@ export const ToDoList: React.FC = () => {
               To Do
             </span>
           </div>
+
           {isTableExpand.isExpand && (
             <div className="inline-block h-full w-full ">
               <div
@@ -236,6 +237,36 @@ export const ToDoList: React.FC = () => {
                   isAddTaskTable ? "border-b-2" : ""
                 }  min:h-[50px] w-full`}
               >
+                <ul className="divide-y border-b-2 font-poppins">
+                  {todos.map((task, index) => (
+                    <li
+                      className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
+                      key={index}
+                    >
+                      <span className="col-span-12 sm:col-span-3 flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="mr-3 size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+
+                        {task.taskName}
+                      </span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                    </li>
+                  ))}
+                </ul>
                 {isAddTaskTable && (
                   <form onSubmit={handleSubmit}>
                     <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
@@ -248,9 +279,9 @@ export const ToDoList: React.FC = () => {
                           className="font-poppins w-full h-full border-none"
                         />
                       </div>
-                      <div className="hidden sm:flex col-span-3">2</div>
-                      <div className="hidden sm:flex col-span-3">3</div>
-                      <div className="hidden sm:flex col-span-3">4</div>
+                      <div className="hidden sm:flex col-span-3"></div>
+                      <div className="hidden sm:flex col-span-3"></div>
+                      <div className="hidden sm:flex col-span-3"></div>
                     </div>
                   </form>
                 )}
