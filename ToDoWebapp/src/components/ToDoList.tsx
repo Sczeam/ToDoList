@@ -144,6 +144,7 @@ export const ToDoList: React.FC = () => {
       isDone: false,
     };
     setTodos([...todos, newTodo]);
+    setTodo("");
     setIsAddTaskTable(false);
   };
   return (
@@ -230,17 +231,21 @@ export const ToDoList: React.FC = () => {
           </div>
           {isTableExpand.isExpand && (
             <div className="inline-block h-full w-full ">
-              <div className="bg-yellow-500 min:h-[50px] w-full">
+              <div
+                className={`${
+                  isAddTaskTable ? "border-b-2" : ""
+                }  min:h-[50px] w-full`}
+              >
                 {isAddTaskTable && (
                   <form onSubmit={handleSubmit}>
                     <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-                      <div className="col-span-12 sm:col-span-3 p-1">
+                      <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
                         <input
                           onChange={(e) => setTodo(e.target.value)}
                           value={todo}
                           type="text"
                           placeholder="Task Name"
-                          className="mx-1 font-poppins w-full h-full border-none"
+                          className="font-poppins w-full h-full border-none"
                         />
                       </div>
                       <div className="hidden sm:flex col-span-3">2</div>
@@ -258,7 +263,7 @@ export const ToDoList: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="h-[100px] w-full bg-red-500"></div>
+      <div className="h-[100px] w-full"></div>
     </>
   );
 };
