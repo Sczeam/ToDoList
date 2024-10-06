@@ -3,6 +3,13 @@ interface TableState {
   icon: JSX.Element;
   isExpand: boolean;
 }
+type Todo = {
+  taskName: string;
+  dueDate?: Date;
+  priority?: "Low" | "Medium" | "High";
+  status?: "On track" | "Off track";
+  isDone: boolean;
+};
 
 export const ToDoList: React.FC = () => {
   const [isSetStatusClick, setStatusClick] = useState<boolean>(false); //useState for setStatus box
@@ -40,6 +47,10 @@ export const ToDoList: React.FC = () => {
     ),
     isExpand: true,
   });
+
+  const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
+  const [todo, setTodo] = useState<string>("");
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
@@ -121,6 +132,20 @@ export const ToDoList: React.FC = () => {
       ),
     }));
   };
+
+  const AddTask = () => {
+    setIsAddTaskTable((prev) => !prev);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newTodo: Todo = {
+      taskName: todo,
+      isDone: false,
+    };
+    setTodos([...todos, newTodo]);
+    setIsAddTaskTable(false);
+  };
   return (
     <>
       <div className="mt-1 col-span-2 grid grid-cols-12">
@@ -192,7 +217,7 @@ export const ToDoList: React.FC = () => {
             Status
           </div>
         </div>
-        <div className="Static col-span-12 min:h-[50px] divide-y ">
+        <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
           <div className="flex flex-inline items-center py-3">
             <span onClick={ExpandTable} className="cursor-pointer">
               {/* expand icon here */}
@@ -204,7 +229,32 @@ export const ToDoList: React.FC = () => {
             </span>
           </div>
           {isTableExpand.isExpand && (
-            <div className="inline-block h-full w-full ">Table here</div>
+            <div className="inline-block h-full w-full ">
+              <div className="bg-yellow-500 min:h-[50px] w-full">
+                {isAddTaskTable && (
+                  <form onSubmit={handleSubmit}>
+                    <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
+                      <div className="col-span-12 sm:col-span-3 p-1">
+                        <input
+                          onChange={(e) => setTodo(e.target.value)}
+                          value={todo}
+                          type="text"
+                          placeholder="Task Name"
+                          className="mx-1 font-poppins w-full h-full border-none"
+                        />
+                      </div>
+                      <div className="hidden sm:flex col-span-3">2</div>
+                      <div className="hidden sm:flex col-span-3">3</div>
+                      <div className="hidden sm:flex col-span-3">4</div>
+                    </div>
+                  </form>
+                )}
+              </div>
+              {console.log(todos)}
+              <span onClick={AddTask} className="select-none cursor-pointer">
+                Add tasks...
+              </span>
+            </div>
           )}
         </div>
       </div>
