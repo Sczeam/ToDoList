@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import autoAnimate from "@formkit/auto-animate";
+
 type Todo = {
   taskName: string;
   dueDate?: Date;
@@ -26,28 +28,18 @@ export const ToDoList: React.FC = () => {
       />
     </svg>
   );
-  // const [isTableExpand, setTableExpand] = useState<TableState>({
-  //   icon: (
-  //     <svg
-  //       xmlns="http://www.w3.org/2000/svg"
-  //       viewBox="0 0 24 24"
-  //       fill="currentColor"
-  //       className="size-6"
-  //     >
-  //       <path
-  //         fill-rule="evenodd"
-  //         d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-  //         clip-rule="evenodd"
-  //       />
-  //     </svg>
-  //   ),
-  //   isExpand: true,
-  // });
+
   const [isToDoExpand, setToDoExpand] = useState<boolean>(true);
   const [isDoingExpand, setDoingExpand] = useState<boolean>(true);
   const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const parentRef = useRef(null);
+  useEffect(() => {
+    if (parentRef.current) {
+      autoAnimate(parentRef.current);
+    }
+  }, [parentRef]);
 
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
@@ -248,7 +240,10 @@ export const ToDoList: React.FC = () => {
                   isAddTaskTable ? "border-b-2" : ""
                 }  min:h-[50px] w-full`}
               >
-                <ul className="divide-y border-b-2 font-poppins">
+                <ul
+                  ref={parentRef}
+                  className="divide-y border-b-2 font-poppins"
+                >
                   {todos.map((task, index) => (
                     <li
                       className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
