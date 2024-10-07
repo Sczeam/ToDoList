@@ -378,42 +378,18 @@ export const ToDoList: React.FC = () => {
                 }  min:h-[50px] w-full`}
               >
                 <ul className="divide-y border-b-2 font-poppins">
-                  {todos.map((task, index) => (
-                    <li
-                      className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
-                      key={index}
-                    >
-                      <span className="col-span-12 sm:col-span-3 flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          className="mr-3 size-6"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg>
-
-                        {task.taskName}
-                      </span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                    </li>
-                  ))}
+                  <li className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1">
+                    <span className="col-span-12 sm:col-span-3 flex items-center"></span>
+                    <span className="hidden sm:flex col-span-3"></span>
+                    <span className="hidden sm:flex col-span-3"></span>
+                    <span className="hidden sm:flex col-span-3"></span>
+                  </li>
                 </ul>
                 {isAddTaskTable && (
-                  <form onSubmit={handleSubmit}>
+                  <form>
                     <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
                       <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
                         <input
-                          onChange={(e) => setTodo(e.target.value)}
-                          value={todo}
                           type="text"
                           placeholder="Task Name"
                           className="font-poppins w-full h-full border-none"
@@ -427,9 +403,7 @@ export const ToDoList: React.FC = () => {
                 )}
               </div>
 
-              <span onClick={AddTask} className="select-none cursor-pointer">
-                Add tasks...
-              </span>
+              <span className="select-none cursor-pointer">Add tasks...</span>
             </div>
           )}
         </div>
