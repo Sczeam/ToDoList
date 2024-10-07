@@ -1,8 +1,4 @@
 import { useState } from "react";
-interface TableState {
-  icon: JSX.Element;
-  isExpand: boolean;
-}
 type Todo = {
   taskName: string;
   dueDate?: Date;
@@ -30,43 +26,28 @@ export const ToDoList: React.FC = () => {
       />
     </svg>
   );
-  const [isTableExpand, setTableExpand] = useState<TableState>({
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="size-6"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    ),
-    isExpand: true,
-  });
-
+  // const [isTableExpand, setTableExpand] = useState<TableState>({
+  //   icon: (
+  //     <svg
+  //       xmlns="http://www.w3.org/2000/svg"
+  //       viewBox="0 0 24 24"
+  //       fill="currentColor"
+  //       className="size-6"
+  //     >
+  //       <path
+  //         fill-rule="evenodd"
+  //         d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+  //         clip-rule="evenodd"
+  //       />
+  //     </svg>
+  //   ),
+  //   isExpand: true,
+  // });
+  const [isToDoExpand, setToDoExpand] = useState<boolean>(true);
+  const [isDoingExpand, setDoingExpand] = useState<boolean>(true);
   const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [taskIcon, setTaskIcon] = useState<JSX.Element>(
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      className="cursor-pointer mr-3 size-6"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-      />
-    </svg>
-  );
 
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
@@ -115,38 +96,12 @@ export const ToDoList: React.FC = () => {
     setStatusClick(false);
   };
 
-  const ExpandTable = () => {
-    setTableExpand((prev) => ({
-      ...prev,
-      isExpand: !prev.isExpand,
-      icon: prev.isExpand ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="size-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="size-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      ),
-    }));
+  const ExpandToDoTable = () => {
+    setToDoExpand((prev) => !prev);
+  };
+
+  const ExpandDoingTable = () => {
+    setDoingExpand((prev) => !prev);
   };
 
   const AddTask = () => {
@@ -246,9 +201,39 @@ export const ToDoList: React.FC = () => {
         {/* To Do start */}
         <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
           <div className="flex flex-inline items-center py-3">
-            <span onClick={ExpandTable} className="cursor-pointer">
+            <span onClick={ExpandToDoTable} className="cursor-pointer">
               {/* expand icon here */}
-              {isTableExpand.icon}
+              {isToDoExpand ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              )}
             </span>
 
             <span className="font-extrabold font-poppins sm:text-[20px] select-none">
@@ -256,7 +241,7 @@ export const ToDoList: React.FC = () => {
             </span>
           </div>
 
-          {isTableExpand.isExpand && (
+          {isToDoExpand && (
             <div className="inline-block h-full w-full ">
               <div
                 className={`${
@@ -342,9 +327,42 @@ export const ToDoList: React.FC = () => {
         {/* Doing start */}
         <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
           <div className="flex flex-inline items-center py-3">
-            <span onClick={ExpandTable} className="cursor-pointer">
+            <span
+              onClick={ExpandDoingTable}
+              className="select-none cursor-pointer"
+            >
               {/* expand icon here */}
-              {isTableExpand.icon}
+              {isDoingExpand ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              )}
             </span>
 
             <span className="font-extrabold font-poppins sm:text-[20px] select-none">
@@ -352,7 +370,7 @@ export const ToDoList: React.FC = () => {
             </span>
           </div>
 
-          {isTableExpand.isExpand && (
+          {isDoingExpand && (
             <div className="inline-block h-full w-full ">
               <div
                 className={`${
