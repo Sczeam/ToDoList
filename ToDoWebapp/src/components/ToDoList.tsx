@@ -51,6 +51,22 @@ export const ToDoList: React.FC = () => {
   const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [taskIcon, setTaskIcon] = useState<JSX.Element>(
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      className="cursor-pointer mr-3 size-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+  );
 
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
@@ -147,6 +163,14 @@ export const ToDoList: React.FC = () => {
     setTodo("");
     setIsAddTaskTable(false);
   };
+
+  const finishedTask = (index: number) => {
+    const updatedTodos = todos.map((task, i) =>
+      i === index ? { ...task, isDone: !task.isDone } : task
+    );
+    setTodos(updatedTodos);
+  };
+
   return (
     <>
       <div className="mt-1 col-span-2 grid grid-cols-12">
@@ -218,6 +242,8 @@ export const ToDoList: React.FC = () => {
             Status
           </div>
         </div>
+
+        {/* To Do start */}
         <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
           <div className="flex flex-inline items-center py-3">
             <span onClick={ExpandTable} className="cursor-pointer">
@@ -227,6 +253,102 @@ export const ToDoList: React.FC = () => {
 
             <span className="font-extrabold font-poppins sm:text-[20px] select-none">
               To Do
+            </span>
+          </div>
+
+          {isTableExpand.isExpand && (
+            <div className="inline-block h-full w-full ">
+              <div
+                className={`${
+                  isAddTaskTable ? "border-b-2" : ""
+                }  min:h-[50px] w-full`}
+              >
+                <ul className="divide-y border-b-2 font-poppins">
+                  {todos.map((task, index) => (
+                    <li
+                      className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
+                      key={index}
+                    >
+                      <span className="col-span-12 sm:col-span-3 flex items-center">
+                        {/* task icon */}
+                        <span onClick={() => finishedTask(index)}>
+                          {task.isDone ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="mr-3 size-6"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              className="mr-3 size-6"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              />
+                            </svg>
+                          )}
+                        </span>
+
+                        {task.taskName}
+                      </span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                      <span className="hidden sm:flex col-span-3"></span>
+                    </li>
+                  ))}
+                </ul>
+                {isAddTaskTable && (
+                  <form onSubmit={handleSubmit}>
+                    <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
+                      <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
+                        <input
+                          onChange={(e) => setTodo(e.target.value)}
+                          value={todo}
+                          type="text"
+                          placeholder="Task Name"
+                          className="font-poppins w-full h-full border-none"
+                        />
+                      </div>
+                      <div className="hidden sm:flex col-span-3"></div>
+                      <div className="hidden sm:flex col-span-3"></div>
+                      <div className="hidden sm:flex col-span-3"></div>
+                    </div>
+                  </form>
+                )}
+              </div>
+
+              <span onClick={AddTask} className="select-none cursor-pointer">
+                Add tasks...
+              </span>
+            </div>
+          )}
+        </div>
+        {/* To Do End */}
+
+        {/* Doing start */}
+        <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
+          <div className="flex flex-inline items-center py-3">
+            <span onClick={ExpandTable} className="cursor-pointer">
+              {/* expand icon here */}
+              {isTableExpand.icon}
+            </span>
+
+            <span className="font-extrabold font-poppins sm:text-[20px] select-none">
+              Doing
             </span>
           </div>
 
@@ -286,14 +408,16 @@ export const ToDoList: React.FC = () => {
                   </form>
                 )}
               </div>
-              {console.log(todos)}
+
               <span onClick={AddTask} className="select-none cursor-pointer">
                 Add tasks...
               </span>
             </div>
           )}
         </div>
+        {/* Doing end */}
       </div>
+
       <div className="h-[100px] w-full"></div>
     </>
   );
