@@ -186,7 +186,7 @@ export const ToDoList: React.FC = () => {
           Add Task
         </button>
       </div>
-      <div className="Relative ml-3 border-t-[1px] min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
+      <div className="Relative flex-colum ml-3  min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
         <div className="h-[30px] w-full grid grid-cols-12 divide-x-2">
           <div className="col-span-3 font-poppins flex items-center">
             Task Name
@@ -204,28 +204,32 @@ export const ToDoList: React.FC = () => {
 
         {/* To Do start */}
         <TaskColum id="todo" tasks={todos} title="To Do" />
-        {isAddTaskTable && (
-          <form onSubmit={handleSubmit}>
-            <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-              <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
-                <input
-                  onChange={(e) => setTodo(e.target.value)}
-                  value={todo}
-                  type="text"
-                  placeholder="Task Name"
-                  className="font-poppins w-full h-full border-none"
-                />
+        <div className="Static border-none col-span-12 min:h-[50px] pr-6">
+          {isAddTaskTable && (
+            <form onSubmit={handleSubmit}>
+              <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
+                <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
+                  <input
+                    onChange={(e) => setTodo(e.target.value)}
+                    value={todo}
+                    type="text"
+                    placeholder="Task Name"
+                    className="font-poppins w-full h-full border-none"
+                  />
+                </div>
+                <div className="hidden sm:flex col-span-3"></div>
+                <div className="hidden sm:flex col-span-3"></div>
+                <div className="hidden sm:flex col-span-3"></div>
               </div>
-              <div className="hidden sm:flex col-span-3"></div>
-              <div className="hidden sm:flex col-span-3"></div>
-              <div className="hidden sm:flex col-span-3"></div>
-            </div>
-          </form>
-        )}
+            </form>
+          )}
+        </div>
+        <div className="mt-1">
+          <span onClick={AddTask} className="select-none cursor-pointer">
+            Add tasks...
+          </span>
+        </div>
 
-        <span onClick={AddTask} className="select-none cursor-pointer">
-          Add tasks...
-        </span>
         {/* To Do End */}
 
         {/* Doing Start */}
@@ -260,10 +264,7 @@ export const TaskColum: React.FC<TaskColumnProps> = ({ id, tasks, title }) => {
     setToDoExpand((prev) => !prev);
   };
   return (
-    <div
-      ref={setNodeRef}
-      className="Static col-span-12 min:h-[50px] divide-y pr-6 "
-    >
+    <div ref={setNodeRef} className="Static col-span-12 min:h-[50px] pr-6 ">
       <div className="flex flex-inline items-center py-3">
         <span onClick={ExpandToDoTable} className="cursor-pointer">
           {/* expand icon here */}
@@ -274,7 +275,7 @@ export const TaskColum: React.FC<TaskColumnProps> = ({ id, tasks, title }) => {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="size-6"
+              className="size-6"
             >
               <path
                 stroke-linecap="round"
@@ -289,7 +290,7 @@ export const TaskColum: React.FC<TaskColumnProps> = ({ id, tasks, title }) => {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="size-6"
+              className="size-6"
             >
               <path
                 stroke-linecap="round"
@@ -308,7 +309,7 @@ export const TaskColum: React.FC<TaskColumnProps> = ({ id, tasks, title }) => {
       {isToDoExpand && (
         <div className="inline-block h-full w-full ">
           <div className={`  min:h-[50px] w-full`}>
-            <ul ref={parentRef} className="divide-y border-b-2 font-poppins">
+            <ul ref={parentRef} className=" border divide-y font-poppins">
               {tasks.map((task, index) => (
                 <TaskItem key={index} task={task} type={id} />
               ))}
