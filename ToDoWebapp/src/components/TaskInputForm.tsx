@@ -17,7 +17,7 @@ export const TaskInputForm: React.FC<TaskInputFormProps> = ({
     <div className="Static border-none col-span-12 min:h-[50px] pr-6">
       {isAddTaskTable && (
         <form onSubmit={handleSubmit}>
-          <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
+          <div className="border min:h-[30px] w-full grid grid-cols-12 divide-x-2">
             <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
               <input
                 onChange={(e) => setTodo(e.target.value)}

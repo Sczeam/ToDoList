@@ -42,7 +42,8 @@ export const ToDoList: React.FC = () => {
   const [doingTask, setDoingTask] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [doing, setDoing] = useState<Todo[]>([]);
-  const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
+  const [isAddTodoTable, setIsAddTodoTable] = useState<boolean>(false); // Controls visibility for 'To Do'
+  const [isAddDoingTable, setIsAddDoingTable] = useState<boolean>(false);
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
   };
@@ -89,19 +90,34 @@ export const ToDoList: React.FC = () => {
     setStatusClick(false);
   };
 
-  const AddTask = () => {
-    setIsAddTaskTable((prev) => !prev);
+  const AddTodoTask = () => {
+    setIsAddTodoTable((prev) => !prev);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const AddDoingTask = () => {
+    setIsAddDoingTable((prev) => !prev);
+  };
+
+  const handleSubmit = (e: React.FormEvent, column: "todo" | "doing") => {
     e.preventDefault();
-    const newTodo: Todo = {
-      taskName: todo,
-      isDone: false,
-    };
-    setTodos([...todos, newTodo]);
-    setTodo("");
-    setIsAddTaskTable(false);
+
+    if (column === "todo") {
+      const newTodo: Todo = {
+        taskName: todo,
+        isDone: false,
+      };
+      setTodos([...todos, newTodo]);
+      setTodo("");
+      setIsAddTodoTable(false);
+    } else if (column === "doing") {
+      const newDoingTask: Todo = {
+        taskName: doingTask,
+        isDone: false,
+      };
+      setDoing([...doing, newDoingTask]);
+      setDoingTask("");
+      setIsAddDoingTable(false);
+    }
   };
 
   // const finishedTask = (index: number) => {
@@ -208,39 +224,11 @@ export const ToDoList: React.FC = () => {
         <TaskColum id="todo" tasks={todos} title="To Do" />
         <TaskInputForm
           todo={todo}
-          isAddTaskTable={isAddTaskTable}
+          isAddTaskTable={isAddTodoTable}
           setTodo={setTodo}
-          handleSubmit={handleSubmit}
-          addTask={AddTask}
+          handleSubmit={(e) => handleSubmit(e, "todo")}
+          addTask={AddTodoTask}
         />
-        {/* <div className="Static border-none col-span-12 min:h-[50px] pr-6">
-          {isAddTaskTable && (
-            <form onSubmit={handleSubmit}>
-              <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-                <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
-                  <input
-                    onChange={(e) => setTodo(e.target.value)}
-                    value={todo}
-                    type="text"
-                    placeholder="Task Name"
-                    className="font-poppins w-full h-full border-none"
-                  />
-                </div>
-                <div className="hidden sm:flex col-span-3"></div>
-                <div className="hidden sm:flex col-span-3"></div>
-                <div className="hidden sm:flex col-span-3"></div>
-              </div>
-            </form>
-          )}
-        </div>
-        <div className={`mt-1 ${isAddTaskTable ? "" : "border-none"}`}>
-          <span
-            onClick={AddTask}
-            className="border-none select-none cursor-pointer"
-          >
-            Add tasks...
-          </span>
-        </div> */}
 
         {/* To Do End */}
 
@@ -250,10 +238,10 @@ export const ToDoList: React.FC = () => {
 
         <TaskInputForm
           todo={doingTask}
-          isAddTaskTable={isAddTaskTable}
-          setTodo={setTodo}
-          handleSubmit={handleSubmit}
-          addTask={AddTask}
+          isAddTaskTable={isAddDoingTable}
+          setTodo={setDoingTask}
+          handleSubmit={(e) => handleSubmit(e, "doing")}
+          addTask={AddDoingTask}
         />
       </div>
     </DndContext>
