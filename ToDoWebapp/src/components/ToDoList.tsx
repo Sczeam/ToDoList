@@ -1,4 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import autoAnimate from "@formkit/auto-animate";
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  DragEndEvent,
+} from "@dnd-kit/core";
+
+import { CSS } from "@dnd-kit/utilities";
+
 type Todo = {
   taskName: string;
   dueDate?: Date;
@@ -26,32 +36,13 @@ export const ToDoList: React.FC = () => {
       />
     </svg>
   );
-  // const [isTableExpand, setTableExpand] = useState<TableState>({
-  //   icon: (
-  //     <svg
-  //       xmlns="http://www.w3.org/2000/svg"
-  //       viewBox="0 0 24 24"
-  //       fill="currentColor"
-  //       className="size-6"
-  //     >
-  //       <path
-  //         fill-rule="evenodd"
-  //         d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
-  //         clip-rule="evenodd"
-  //       />
-  //     </svg>
-  //   ),
-  //   isExpand: true,
-  // });
-  const [isToDoExpand, setToDoExpand] = useState<boolean>(true);
-  const [isDoingExpand, setDoingExpand] = useState<boolean>(true);
-  const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
+
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
-
+  const [doing, setDoing] = useState<Todo[]>([]);
+  const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
-    console.log("clicked");
   };
 
   const OnTrack = () => {
@@ -96,14 +87,6 @@ export const ToDoList: React.FC = () => {
     setStatusClick(false);
   };
 
-  const ExpandToDoTable = () => {
-    setToDoExpand((prev) => !prev);
-  };
-
-  const ExpandDoingTable = () => {
-    setDoingExpand((prev) => !prev);
-  };
-
   const AddTask = () => {
     setIsAddTaskTable((prev) => !prev);
   };
@@ -119,15 +102,36 @@ export const ToDoList: React.FC = () => {
     setIsAddTaskTable(false);
   };
 
-  const finishedTask = (index: number) => {
-    const updatedTodos = todos.map((task, i) =>
-      i === index ? { ...task, isDone: !task.isDone } : task
-    );
-    setTodos(updatedTodos);
+  // const finishedTask = (index: number) => {
+  //   const updatedTodos = todos.map((task, i) =>
+  //     i === index ? { ...task, isDone: !task.isDone } : task
+  //   );
+  //   setTodos(updatedTodos);
+  // };
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) return; // Exit if no valid drop target
+
+    if (over.id === "doing" && active.data.current?.type === "todo") {
+      const task = todos.find((task) => task.taskName === active.id);
+      if (task) {
+        setTodos((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setDoing((prev) => [...prev, task]);
+      }
+    }
+
+    if (over.id === "todo" && active.data.current?.type === "doing") {
+      const task = doing.find((task) => task.taskName === active.id);
+      if (task) {
+        setDoing((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setTodos((prev) => [...prev, task]);
+      }
+    }
   };
 
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd}>
       <div className="mt-1 col-span-2 grid grid-cols-12">
         <div className="p-1 h-[30px] col-span-4 sm:col-span-1 flex justify-center items-center">
           <input
@@ -182,7 +186,7 @@ export const ToDoList: React.FC = () => {
           Add Task
         </button>
       </div>
-      <div className="Relative ml-3 border-t-[1px] min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
+      <div className="Relative flex-colum ml-3  min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
         <div className="h-[30px] w-full grid grid-cols-12 divide-x-2">
           <div className="col-span-3 font-poppins flex items-center">
             Task Name
@@ -199,218 +203,157 @@ export const ToDoList: React.FC = () => {
         </div>
 
         {/* To Do start */}
-        <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
-          <div className="flex flex-inline items-center py-3">
-            <span onClick={ExpandToDoTable} className="cursor-pointer">
-              {/* expand icon here */}
-              {isToDoExpand ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+        <TaskColum id="todo" tasks={todos} title="To Do" />
+        <div className="Static border-none col-span-12 min:h-[50px] pr-6">
+          {isAddTaskTable && (
+            <form onSubmit={handleSubmit}>
+              <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
+                <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
+                  <input
+                    onChange={(e) => setTodo(e.target.value)}
+                    value={todo}
+                    type="text"
+                    placeholder="Task Name"
+                    className="font-poppins w-full h-full border-none"
                   />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              )}
-            </span>
-
-            <span className="font-extrabold font-poppins sm:text-[20px] select-none">
-              To Do
-            </span>
-          </div>
-
-          {isToDoExpand && (
-            <div className="inline-block h-full w-full ">
-              <div
-                className={`${
-                  isAddTaskTable ? "border-b-2" : ""
-                }  min:h-[50px] w-full`}
-              >
-                <ul className="divide-y border-b-2 font-poppins">
-                  {todos.map((task, index) => (
-                    <li
-                      className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
-                      key={index}
-                    >
-                      <span className="col-span-12 sm:col-span-3 flex items-center">
-                        {/* task icon */}
-                        <span onClick={() => finishedTask(index)}>
-                          {task.isDone ? (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              className="mr-3 size-6"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="mr-3 size-6"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                              />
-                            </svg>
-                          )}
-                        </span>
-
-                        {task.taskName}
-                      </span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                      <span className="hidden sm:flex col-span-3"></span>
-                    </li>
-                  ))}
-                </ul>
-                {isAddTaskTable && (
-                  <form onSubmit={handleSubmit}>
-                    <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-                      <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
-                        <input
-                          onChange={(e) => setTodo(e.target.value)}
-                          value={todo}
-                          type="text"
-                          placeholder="Task Name"
-                          className="font-poppins w-full h-full border-none"
-                        />
-                      </div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                    </div>
-                  </form>
-                )}
+                </div>
+                <div className="hidden sm:flex col-span-3"></div>
+                <div className="hidden sm:flex col-span-3"></div>
+                <div className="hidden sm:flex col-span-3"></div>
               </div>
-
-              <span onClick={AddTask} className="select-none cursor-pointer">
-                Add tasks...
-              </span>
-            </div>
+            </form>
           )}
         </div>
+        <div className="mt-1">
+          <span onClick={AddTask} className="select-none cursor-pointer">
+            Add tasks...
+          </span>
+        </div>
+
         {/* To Do End */}
 
-        {/* Doing start */}
-        <div className="Static col-span-12 min:h-[50px] divide-y pr-6 ">
-          <div className="flex flex-inline items-center py-3">
-            <span
-              onClick={ExpandDoingTable}
-              className="select-none cursor-pointer"
+        {/* Doing Start */}
+        <TaskColum id="doing" tasks={doing} title="Doing" />
+        {/* Doing End */}
+      </div>
+    </DndContext>
+  );
+};
+
+interface TaskColumnProps {
+  id: string;
+  tasks: Todo[];
+  title: string;
+}
+
+export const TaskColum: React.FC<TaskColumnProps> = ({ id, tasks, title }) => {
+  const { setNodeRef } = useDroppable({
+    id,
+  });
+
+  const [isToDoExpand, setToDoExpand] = useState<boolean>(true);
+
+  const parentRef = useRef(null);
+  useEffect(() => {
+    if (parentRef.current) {
+      autoAnimate(parentRef.current);
+    }
+  }, [parentRef]);
+
+  const ExpandToDoTable = () => {
+    setToDoExpand((prev) => !prev);
+  };
+  return (
+    <div ref={setNodeRef} className="Static col-span-12 min:h-[50px] pr-6 ">
+      <div className="flex flex-inline items-center py-3">
+        <span onClick={ExpandToDoTable} className="cursor-pointer">
+          {/* expand icon here */}
+          {isToDoExpand ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
             >
-              {/* expand icon here */}
-              {isDoingExpand ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              )}
-            </span>
-
-            <span className="font-extrabold font-poppins sm:text-[20px] select-none">
-              Doing
-            </span>
-          </div>
-
-          {isDoingExpand && (
-            <div className="inline-block h-full w-full ">
-              <div
-                className={`${
-                  isAddTaskTable ? "border-b-2" : ""
-                }  min:h-[50px] w-full`}
-              >
-                <ul className="divide-y border-b-2 font-poppins">
-                  <li className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1">
-                    <span className="col-span-12 sm:col-span-3 flex items-center"></span>
-                    <span className="hidden sm:flex col-span-3"></span>
-                    <span className="hidden sm:flex col-span-3"></span>
-                    <span className="hidden sm:flex col-span-3"></span>
-                  </li>
-                </ul>
-                {isAddTaskTable && (
-                  <form>
-                    <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-                      <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
-                        <input
-                          type="text"
-                          placeholder="Task Name"
-                          className="font-poppins w-full h-full border-none"
-                        />
-                      </div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                      <div className="hidden sm:flex col-span-3"></div>
-                    </div>
-                  </form>
-                )}
-              </div>
-
-              <span className="select-none cursor-pointer">Add tasks...</span>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m19.5 8.25-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
           )}
-        </div>
-        {/* Doing end */}
+        </span>
+
+        <span className="font-extrabold font-poppins sm:text-[20px] select-none">
+          {title}
+        </span>
       </div>
 
-      <div className="h-[100px] w-full"></div>
-    </>
+      {isToDoExpand && (
+        <div className="inline-block h-full w-full ">
+          <div className={`  min:h-[50px] w-full`}>
+            <ul ref={parentRef} className=" border divide-y font-poppins">
+              {tasks.map((task, index) => (
+                <TaskItem key={index} task={task} type={id} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface TaskItemProps {
+  task: Todo;
+  type: string;
+}
+const TaskItem: React.FC<TaskItemProps> = ({ task, type }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: task.taskName,
+      data: {
+        type,
+      },
+    });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className="min:h-[30px] w-full grid grid-cols-12 divide-x-2 p-1"
+    >
+      <span className="col-span-12 sm:col-span-3 flex items-center">
+        {/* task icon */}
+        {task.taskName}
+      </span>
+      <span className="hidden sm:flex col-span-3"></span>
+      <span className="hidden sm:flex col-span-3"></span>
+      <span className="hidden sm:flex col-span-3"></span>
+    </li>
   );
 };
