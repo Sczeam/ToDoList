@@ -40,10 +40,13 @@ export const ToDoList: React.FC = () => {
 
   const [todo, setTodo] = useState<string>("");
   const [doingTask, setDoingTask] = useState<string>("");
+  const [doneTask, setDoneTask] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [doing, setDoing] = useState<Todo[]>([]);
+  const [done, setDone] = useState<Todo[]>([]);
   const [isAddTodoTable, setIsAddTodoTable] = useState<boolean>(false); // Controls visibility for 'To Do'
   const [isAddDoingTable, setIsAddDoingTable] = useState<boolean>(false);
+  const [isAddDoneTable, setIsAddDoneTable] = useState<boolean>(false);
   const ToogleSetStatus = () => {
     setStatusClick((prev) => !prev);
   };
@@ -98,7 +101,14 @@ export const ToDoList: React.FC = () => {
     setIsAddDoingTable((prev) => !prev);
   };
 
-  const handleSubmit = (e: React.FormEvent, column: "todo" | "doing") => {
+  const AddDoneTask = () => {
+    setIsAddDoneTable((prev) => !prev);
+  };
+
+  const handleSubmit = (
+    e: React.FormEvent,
+    column: "todo" | "doing" | "done"
+  ) => {
     e.preventDefault();
 
     if (column === "todo") {
@@ -117,33 +127,64 @@ export const ToDoList: React.FC = () => {
       setDoing([...doing, newDoingTask]);
       setDoingTask("");
       setIsAddDoingTable(false);
+    } else if (column === "done") {
+      const newDoneTask: Todo = {
+        taskName: doneTask,
+        isDone: true,
+      };
+      setDone([...done, newDoneTask]);
+      setDoneTask("");
+      setIsAddDoneTable(false);
     }
   };
 
-  // const finishedTask = (index: number) => {
-  //   const updatedTodos = todos.map((task, i) =>
-  //     i === index ? { ...task, isDone: !task.isDone } : task
-  //   );
-  //   setTodos(updatedTodos);
-  // };
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return; // Exit if no valid drop target
 
-    if (over.id === "doing" && active.data.current?.type === "todo") {
+    // From 'To Do' to 'Doing' or 'Done'
+    if (active.data.current?.type === "todo") {
       const task = todos.find((task) => task.taskName === active.id);
-      if (task) {
+
+      if (over.id === "doing" && task) {
+        // Move task from 'To Do' to 'Doing'
         setTodos((prev) => prev.filter((t) => t.taskName !== task.taskName));
         setDoing((prev) => [...prev, task]);
+      } else if (over.id === "done" && task) {
+        // Move task from 'To Do' to 'Done'
+        setTodos((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setDone((prev) => [...prev, { ...task, isDone: true }]);
       }
     }
 
-    if (over.id === "todo" && active.data.current?.type === "doing") {
+    // From 'Doing' to 'To Do' or 'Done'
+    if (active.data.current?.type === "doing") {
       const task = doing.find((task) => task.taskName === active.id);
-      if (task) {
+
+      if (over.id === "todo" && task) {
+        // Move task from 'Doing' to 'To Do'
         setDoing((prev) => prev.filter((t) => t.taskName !== task.taskName));
         setTodos((prev) => [...prev, task]);
+      } else if (over.id === "done" && task) {
+        // Move task from 'Doing' to 'Done'
+        setDoing((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setDone((prev) => [...prev, { ...task, isDone: true }]);
+      }
+    }
+
+    // From 'Done' to 'To Do' or 'Doing'
+    if (active.data.current?.type === "done") {
+      const task = done.find((task) => task.taskName === active.id);
+
+      if (over.id === "todo" && task) {
+        // Move task from 'Done' to 'To Do'
+        setDone((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setTodos((prev) => [...prev, { ...task, isDone: false }]);
+      } else if (over.id === "doing" && task) {
+        // Move task from 'Done' to 'Doing'
+        setDone((prev) => prev.filter((t) => t.taskName !== task.taskName));
+        setDoing((prev) => [...prev, { ...task, isDone: false }]);
       }
     }
   };
@@ -205,7 +246,7 @@ export const ToDoList: React.FC = () => {
         </button>
       </div>
       <div className="Relative flex-colum ml-3  min-h-[30px] w-full col-span-2 divide-y divide-slate-200">
-        <div className="h-[30px] w-full grid grid-cols-12 divide-x-2">
+        <div className="select-none h-[30px] w-full grid grid-cols-12 divide-x-2">
           <div className="col-span-3 font-poppins flex items-center">
             Task Name
           </div>
@@ -234,8 +275,6 @@ export const ToDoList: React.FC = () => {
 
         {/* Doing Start */}
         <TaskColum id="doing" tasks={doing} title="Doing" />
-        {/* Doing End */}
-
         <TaskInputForm
           todo={doingTask}
           isAddTaskTable={isAddDoingTable}
@@ -243,6 +282,18 @@ export const ToDoList: React.FC = () => {
           handleSubmit={(e) => handleSubmit(e, "doing")}
           addTask={AddDoingTask}
         />
+        {/* Doing End */}
+
+        {/* Start Done */}
+        <TaskColum id="done" tasks={done} title="Done" />
+        <TaskInputForm
+          todo={doneTask}
+          isAddTaskTable={isAddDoneTable}
+          setTodo={setDoneTask}
+          handleSubmit={(e) => handleSubmit(e, "done")}
+          addTask={AddDoneTask}
+        />
+        {/* End Done */}
       </div>
     </DndContext>
   );
