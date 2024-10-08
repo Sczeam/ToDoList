@@ -224,8 +224,11 @@ export const ToDoList: React.FC = () => {
             </form>
           )}
         </div>
-        <div className="mt-1">
-          <span onClick={AddTask} className="select-none cursor-pointer">
+        <div className={`mt-1 ${isAddTaskTable ? "" : "border-none"}`}>
+          <span
+            onClick={AddTask}
+            className="border-none select-none cursor-pointer"
+          >
             Add tasks...
           </span>
         </div>
