@@ -8,6 +8,7 @@ import {
 } from "@dnd-kit/core";
 
 import { CSS } from "@dnd-kit/utilities";
+import { TaskInputForm } from "./TaskInputForm";
 
 type Todo = {
   taskName: string;
@@ -38,6 +39,7 @@ export const ToDoList: React.FC = () => {
   );
 
   const [todo, setTodo] = useState<string>("");
+  const [doingTask, setDoingTask] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [doing, setDoing] = useState<Todo[]>([]);
   const [isAddTaskTable, setIsAddTaskTable] = useState<boolean>(false);
@@ -204,7 +206,14 @@ export const ToDoList: React.FC = () => {
 
         {/* To Do start */}
         <TaskColum id="todo" tasks={todos} title="To Do" />
-        <div className="Static border-none col-span-12 min:h-[50px] pr-6">
+        <TaskInputForm
+          todo={todo}
+          isAddTaskTable={isAddTaskTable}
+          setTodo={setTodo}
+          handleSubmit={handleSubmit}
+          addTask={AddTask}
+        />
+        {/* <div className="Static border-none col-span-12 min:h-[50px] pr-6">
           {isAddTaskTable && (
             <form onSubmit={handleSubmit}>
               <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
@@ -231,7 +240,7 @@ export const ToDoList: React.FC = () => {
           >
             Add tasks...
           </span>
-        </div>
+        </div> */}
 
         {/* To Do End */}
 
@@ -239,35 +248,13 @@ export const ToDoList: React.FC = () => {
         <TaskColum id="doing" tasks={doing} title="Doing" />
         {/* Doing End */}
 
-        <div className="Static border-none col-span-12 min:h-[50px] pr-6">
-          {isAddTaskTable && (
-            <form onSubmit={handleSubmit}>
-              <div className=" h-[30px] w-full grid grid-cols-12 divide-x-2">
-                <div className=" flex justify-center items-center col-span-12 sm:col-span-3 p-1">
-                  <input
-                    onChange={(e) => setTodo(e.target.value)}
-                    value={todo}
-                    type="text"
-                    placeholder="Task Name"
-                    className="font-poppins w-full h-full border-none"
-                  />
-                </div>
-                <div className="hidden sm:flex col-span-3"></div>
-                <div className="hidden sm:flex col-span-3"></div>
-                <div className="hidden sm:flex col-span-3"></div>
-              </div>
-            </form>
-          )}
-        </div>
-
-        <div className={`mt-1 ${isAddTaskTable ? "" : "border-none"}`}>
-          <span
-            onClick={AddTask}
-            className="border-none select-none cursor-pointer"
-          >
-            Add tasks...
-          </span>
-        </div>
+        <TaskInputForm
+          todo={doingTask}
+          isAddTaskTable={isAddTaskTable}
+          setTodo={setTodo}
+          handleSubmit={handleSubmit}
+          addTask={AddTask}
+        />
       </div>
     </DndContext>
   );
