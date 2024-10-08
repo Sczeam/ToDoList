@@ -274,14 +274,17 @@ export const ToDoList: React.FC = () => {
         {/* To Do End */}
 
         {/* Doing Start */}
-        <TaskColum id="doing" tasks={doing} title="Doing" />
-        <TaskInputForm
-          todo={doingTask}
-          isAddTaskTable={isAddDoingTable}
-          setTodo={setDoingTask}
-          handleSubmit={(e) => handleSubmit(e, "doing")}
-          addTask={AddDoingTask}
-        />
+        <div className="hidden sm:block">
+          <TaskColum id="doing" tasks={doing} title="Doing" />
+          <TaskInputForm
+            todo={doingTask}
+            isAddTaskTable={isAddDoingTable}
+            setTodo={setDoingTask}
+            handleSubmit={(e) => handleSubmit(e, "doing")}
+            addTask={AddDoingTask}
+          />
+        </div>
+
         {/* Doing End */}
 
         {/* Start Done */}
